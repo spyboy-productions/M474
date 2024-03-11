@@ -20,12 +20,6 @@ M474 is an open-source network privacy and security tool designed to enhance you
 
 ## Installation
 
-### Prerequisites
-
-- Python 3.x
-- `psutil` Python library (install using `pip install psutil`)
-- `requests` Python library (install using `pip install requests`)
-
 ### Clone the Repository
 
 ```bash
@@ -35,7 +29,10 @@ git clone https://github.com/spyboy-productions/m474.git
 cd m474
 ```
 ```bash
-python m474.py
+pip3 install -r requirements.txt
+```
+```bash
+python3 m474.py
 ```
 
 Contribution
