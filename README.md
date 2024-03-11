@@ -23,16 +23,16 @@ M474 is an open-source network privacy and security tool designed to enhance you
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/spyboy-productions/m474.git
+git clone https://github.com/spyboy-productions/M474.git
 ```
 ```bash
-cd m474
+cd M474
 ```
 ```bash
 pip3 install -r requirements.txt
 ```
 ```bash
-python3 m474.py
+python3 M474.py
 ```
 
 Contribution
