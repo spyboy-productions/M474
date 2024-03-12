@@ -9,6 +9,9 @@ class colors:
     RED = '\033[91m'
     NC = '\033[0m'
 
+# Print separator
+print(colors.GREEN + "=============================================================================================================[+]" + colors.NC)
+
 # Check if script is run as root
 if os.geteuid() != 0:
     print(colors.RED + "This script must be run as root")
@@ -28,13 +31,15 @@ mac2 = ':'.join(format(random.randint(0x00, 0xff), '02x') for _ in range(3))
 # Change MAC address of interface eth0
 subprocess.run(["macchanger", "-m", f"{mac1}:{mac2}", "eth0"])
 
-# Find the path of the script, suppressing permission denied errors
-path = subprocess.check_output(["find", "/", "-name", "n0Mac.sh"], stderr=subprocess.DEVNULL).decode().splitlines()
-if path:
-    path = path[0]
-else:
-    print("Error: n0Mac.sh script not found.")
+# Find the path of the script
+try:
+    path = subprocess.check_output(["find", "/", "-name", "n0Mac.sh"], stderr=subprocess.DEVNULL).decode().strip()
+except subprocess.CalledProcessError:
+    print(colors.RED + "Error: n0Mac.sh script not found.")
     exit(1)
+
+# Print separator
+print(colors.GREEN + "=============================================================================================================[+]" + colors.NC)
 
 # Check if the script is already set up in the crontab
 if re.search("n0Mac.sh", open("/etc/crontab").read()):
