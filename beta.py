@@ -1,67 +1,39 @@
 import subprocess
-import random
 import os
+import random
+import re
 
-# Define colors for console output
-class Color:
-    GREEN = '\033[1;32m'
-    RED = '\033[1;31m'
-    NC = '\033[0m'  # No Color
-
-# Function to execute shell commands
-def execute_command(command):
-    process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-    output, error = process.communicate()
-    return output.decode().strip(), error.decode().strip()
+# Define colors for terminal output
+class colors:
+    GREEN = '\033[92m'
+    RED = '\033[91m'
+    NC = '\033[0m'
 
 # Check if script is run as root
-def check_root():
-    if os.geteuid() != 0:
-        print(f"{Color.RED}This script must be run as root{Color.NC}")
-        exit(1)
+if os.geteuid() != 0:
+    print(colors.RED + "This script must be run as root")
+    exit(1)
 
-# Function to change MAC address
-def change_mac_address(interface):
-    # Get list of vendor MAC addresses
-    vendor_list, _ = execute_command("macchanger -l")
-    vendor = random.choice(vendor_list.splitlines()).split()[2]  # Select a random vendor MAC address
-    new_mac = ':'.join([f"{random.randint(0x00, 0xff):02x}" for _ in range(3)])  # Generate a random MAC address
-    new_mac_address = f"{vendor}:{new_mac}"  # Combine vendor and random MAC address
-    output, error = execute_command(f"macchanger -m {new_mac_address} {interface}")  # Change MAC address
-    if "New MAC" in output:
-        print(f"{Color.GREEN}MAC Address successfully changed.{Color.NC}")
-        print(f"New MAC Address: {new_mac_address}")
-    else:
-        print(f"{Color.RED}Error changing MAC address: {error}{Color.NC}")
+# Run macchanger -l command and redirect output to vendor_list.txt
+subprocess.run(["macchanger", "-l"], stdout=open("vendor_list.txt", "w"))
 
-# Function to renew IP addresses
-def renew_ip_addresses():
-    output, error = execute_command("dhclient -r")  # Release current IP addresses
-    if not error:
-        output, error = execute_command("dhclient")  # Renew IP addresses
-        if not error:
-            print(f"{Color.GREEN}IP addresses successfully renewed.{Color.NC}")
-        else:
-            print(f"{Color.RED}Error renewing IP addresses: {error}{Color.NC}")
-    else:
-        print(f"{Color.RED}Error releasing IP addresses: {error}{Color.NC}")
+# Get a list of MAC addresses and select a random one
+with open("vendor_list.txt", "r") as file:
+    mac_list = file.readlines()
+mac1 = random.choice(mac_list).split()[2]
 
-# Function to randomize internal IP address
-def randomize_internal_ip():
-    new_ip = ".".join([str(random.randint(0, 255)) for _ in range(4)])  # Generate a random internal IP address
-    output, error = execute_command(f"ifconfig eth0 {new_ip}")  # Change internal IP address
-    if not error:
-        print(f"{Color.GREEN}New Internal IP Address: {new_ip}{Color.NC}")
-    else:
-        print(f"{Color.RED}Error randomizing internal IP address: {error}{Color.NC}")
+# Generate a random MAC address
+mac2 = ':'.join(format(random.randint(0x00, 0xff), '02x') for _ in range(3))
 
-# Main function
-def main():
-    check_root()  # Check if script is run as root
-    interface = input("Enter the network interface (e.g., 'eth0'): ")
-    change_mac_address(interface)  # Change MAC address
-    renew_ip_addresses()  # Renew IP addresses
-    randomize_internal_ip()  # Randomize internal IP address
+# Change MAC address of interface eth0
+subprocess.run(["macchanger", "-m", f"{mac1}:{mac2}", "eth0"])
 
-if __name__ == "__main__":
-    main()
+# Find the path of the script
+path = subprocess.check_output(["find", "/", "-name", "n0Mac.sh"]).decode().splitlines()[0]
+
+# Check if the script is already set up in the crontab
+if re.search("n0Mac.sh", open("/etc/crontab").read()):
+    exit(1)
+else:
+    with open("/etc/crontab", "a") as file:
+        file.write("@reboot root /bin/sh " + path + "\n")
