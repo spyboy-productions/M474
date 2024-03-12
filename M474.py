@@ -48,9 +48,9 @@ def renew_ip():
     try:
         subprocess.run(['sudo', 'dhclient', '-r'], check=True)
         subprocess.run(['sudo', 'dhclient'], check=True)
-        print(f"{Color.GREEN}IP addresses successfully renewed.{Color.ENDC}")
+        print_with_timestamp(f"{Color.GREEN}IP addresses successfully renewed.{Color.ENDC}")
     except subprocess.CalledProcessError as e:
-        print(f"{Color.FAIL}Error renewing IP addresses: {e}{Color.ENDC}")
+        print_with_timestamp(f"{Color.FAIL}Error renewing IP addresses: {e}{Color.ENDC}")
 
 def generate_random_mac():
     return ':'.join([format(random.randint(0, 255), '02x') for _ in range(6)])
@@ -66,11 +66,12 @@ def change_mac(interface, new_mac):
 
 def check_network_connectivity():
     try:
-        socket.create_connection(("www.google.com", 80))
+        # Using Google DNS as a reliable host to check connectivity
+        socket.create_connection(("8.8.8.8", 53), timeout=2)
         return True
     except OSError:
         return False
-
+        
 def print_with_timestamp(message):
     timestamp = datetime.datetime.now().strftime("[%Y-%m-%d %H:%M:%S]")
     print(f"{timestamp} {message}")
@@ -103,7 +104,7 @@ def main():
 
         renew_ip_option = input("Do you want to renew IP addresses? (yes/no): ").lower()
 
-        if renew_ip_option == 'yes' and network_status:
+        if renew_ip_option == 'yes':
             renew_ip()
 
         randomize_internal_ip_option = input("Do you want to randomize the internal IP address? (yes/no): ").lower()
@@ -130,6 +131,7 @@ def main():
         print("\nOperation aborted by user.")
     except Exception as e:
         print_with_timestamp(f"{Color.FAIL}An unexpected error occurred: {e}{Color.ENDC}")
+
 
 if __name__ == "__main__":
     main()
