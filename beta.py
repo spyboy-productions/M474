@@ -39,17 +39,20 @@ if os.geteuid() != 0:
     print(colors.RED + "This script must be run as root")
     exit(1)
 
-# Print current MAC address
-current_mac = subprocess.check_output(["ifconfig", "eth0"]).decode()
-print("Current MAC address:", re.search(r"ether\s+([0-9a-fA-F:]+)", current_mac).group(1))
+# Get current MAC address
+current_mac_info = subprocess.check_output(["ifconfig", "eth0"]).decode()
+current_mac = re.search(r"ether\s+([0-9a-fA-F:]+)", current_mac_info).group(1)
 
 # Get internal IP address
 internal_ip = get_internal_ip()
-if internal_ip:
-    print("Internal IP address:", internal_ip)
 
 # Get external IP address
 external_ip = get_external_ip()
+
+# Print current MAC address and IP addresses
+print("Current MAC address:", current_mac)
+if internal_ip:
+    print("Internal IP address:", internal_ip)
 if external_ip:
     print("External IP address:", external_ip)
 
@@ -59,19 +62,12 @@ renew_ip()
 # Print separator
 print(colors.GREEN + "=============================================================================================================[+]" + colors.NC)
 
-# Print new MAC address
-# Run macchanger -l command and redirect output to vendor_list.txt
+# Change MAC address
 subprocess.run(["macchanger", "-l"], stdout=open("vendor_list.txt", "w"))
-
-# Get a list of MAC addresses and select a random one
 with open("vendor_list.txt", "r") as file:
     mac_list = file.readlines()
 mac1 = random.choice(mac_list).split()[2]
-
-# Generate a random MAC address
 mac2 = ':'.join(format(random.randint(0x00, 0xff), '02x') for _ in range(3))
-
-# Change MAC address of interface eth0
 subprocess.run(["macchanger", "-m", f"{mac1}:{mac2}", "eth0"])
 
 # Print new MAC address
