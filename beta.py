@@ -3,6 +3,7 @@ import os
 import random
 import re
 import requests
+import platform
 
 # Define colors for terminal output
 class colors:
@@ -12,7 +13,15 @@ class colors:
 
 # Function to get internal IP address
 def get_internal_ip():
-    return subprocess.check_output(["hostname", "-I"]).decode().strip()
+    if platform.system() == "Windows":
+        ipconfig_output = subprocess.check_output(["ipconfig"]).decode()
+        match = re.search(r"IPv4 Address[^\n:]*: ([\d.]+)", ipconfig_output)
+        if match:
+            return match.group(1)
+        else:
+            return None
+    else:
+        return subprocess.check_output(["hostname", "-I"]).decode().strip()
 
 # Function to get external IP address
 def get_external_ip():
@@ -25,23 +34,27 @@ def get_external_ip():
 
 # Function to renew IP address
 def renew_ip():
-    try:
-        subprocess.run(["dhclient", "-r"])
-        subprocess.run(["dhclient"])
-    except subprocess.CalledProcessError as e:
-        print(colors.RED + "Error renewing IP:", e)
+    if platform.system() == "Windows":
+        subprocess.run(["ipconfig", "/release"])
+        subprocess.run(["ipconfig", "/renew"])
+    else:
+        try:
+            subprocess.run(["dhclient", "-r"])
+            subprocess.run(["dhclient"])
+        except subprocess.CalledProcessError as e:
+            print(colors.RED + "Error renewing IP:", e)
 
 # Print separator
 print(colors.GREEN + "=============================================================================================================[+]" + colors.NC)
 
-# Check if script is run as root
-if os.geteuid() != 0:
+# Check if script is run as root (on Unix-like systems)
+if platform.system() != "Windows" and os.geteuid() != 0:
     print(colors.RED + "This script must be run as root")
     exit(1)
 
-# Get current MAC address
-current_mac_info = subprocess.check_output(["ifconfig", "eth0"]).decode()
-current_mac = re.search(r"ether\s+([0-9a-fA-F:]+)", current_mac_info).group(1)
+# Get current MAC address (this part remains the same for both systems)
+current_mac_info = subprocess.check_output(["ifconfig" if platform.system() != "Windows" else "getmac"]).decode()
+current_mac = re.search(r"ether\s+([0-9a-fA-F:]+)", current_mac_info if platform.system() != "Windows" else current_mac_info.split("\n")[3]).group(1)
 
 # Get internal IP address
 internal_ip = get_internal_ip()
@@ -62,13 +75,13 @@ renew_ip()
 # Print separator
 print(colors.GREEN + "=============================================================================================================[+]" + colors.NC)
 
-# Change MAC address
-subprocess.run(["macchanger", "-l"], stdout=open("vendor_list.txt", "w"))
+# Change MAC address (this part remains the same for both systems)
+subprocess.run(["macchanger" if platform.system() != "Windows" else "getmac", "-l"], stdout=open("vendor_list.txt", "w"))
 with open("vendor_list.txt", "r") as file:
     mac_list = file.readlines()
 mac1 = random.choice(mac_list).split()[2]
 mac2 = ':'.join(format(random.randint(0x00, 0xff), '02x') for _ in range(3))
-subprocess.run(["macchanger", "-m", f"{mac1}:{mac2}", "eth0"])
+subprocess.run(["macchanger" if platform.system() != "Windows" else "getmac", "-m", f"{mac1}:{mac2}", "eth0"])
 
 # Print new MAC address
 print("New MAC address:", f"{mac1}:{mac2}")
