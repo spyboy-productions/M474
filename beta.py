@@ -30,6 +30,7 @@ def change_mac_address(interface):
     output, error = execute_command(f"macchanger -m {new_mac_address} {interface}")  # Change MAC address
     if "New MAC" in output:
         print(f"{Color.GREEN}MAC Address successfully changed.{Color.NC}")
+        print(f"New MAC Address: {new_mac_address}")
     else:
         print(f"{Color.RED}Error changing MAC address: {error}{Color.NC}")
 
