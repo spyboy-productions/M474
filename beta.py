@@ -28,8 +28,13 @@ mac2 = ':'.join(format(random.randint(0x00, 0xff), '02x') for _ in range(3))
 # Change MAC address of interface eth0
 subprocess.run(["macchanger", "-m", f"{mac1}:{mac2}", "eth0"])
 
-# Find the path of the script
-path = subprocess.check_output(["find", "/", "-name", "n0Mac.sh"]).decode().splitlines()[0]
+# Find the path of the script, suppressing permission denied errors
+path = subprocess.check_output(["find", "/", "-name", "n0Mac.sh"], stderr=subprocess.DEVNULL).decode().splitlines()
+if path:
+    path = path[0]
+else:
+    print("Error: n0Mac.sh script not found.")
+    exit(1)
 
 # Check if the script is already set up in the crontab
 if re.search("n0Mac.sh", open("/etc/crontab").read()):
