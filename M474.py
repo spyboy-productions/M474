@@ -17,11 +17,9 @@ def get_current_mac(interface):
         print(f"Error retrieving MAC address: {e}")
     return None
 
-def get_internal_ip(randomize=False):
+def get_internal_ip():
     try:
         internal_ip = psutil.net_if_addrs().get('lo', [])[0].address
-        if randomize:
-            internal_ip = ".".join(map(str, (random.randint(1, 255) for _ in range(4))))
         return internal_ip
     except (AttributeError, IndexError, psutil.Error) as e:
         print(f"Error retrieving internal IP address: {e}")
@@ -45,6 +43,15 @@ def renew_ip():
 
 def generate_random_mac():
     return ':'.join([format(random.randint(0, 255), '02x') for _ in range(6)])
+
+def change_mac(interface, new_mac):
+    try:
+        subprocess.run(['sudo', 'ifconfig', interface, 'down'], check=True)
+        subprocess.run(['sudo', 'ifconfig', interface, 'hw', 'ether', new_mac], check=True)
+        subprocess.run(['sudo', 'ifconfig', interface, 'up'], check=True)
+        print("MAC Address successfully changed.")
+    except subprocess.CalledProcessError as e:
+        print(f"Error changing MAC address: {e}")
 
 def check_network_connectivity():
     try:
@@ -91,7 +98,7 @@ def main():
         randomize_internal_ip_option = input("Do you want to randomize the internal IP address? (yes/no): ").lower()
 
         if randomize_internal_ip_option == 'yes':
-            new_internal_ip = get_internal_ip(randomize=True)
+            new_internal_ip = generate_random_mac()
             print_with_timestamp(f"New Internal IP Address: {new_internal_ip}")
 
         change_mac_option = input("Do you want to change the MAC address? (yes/no): ").lower()
