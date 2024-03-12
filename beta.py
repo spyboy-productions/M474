@@ -76,12 +76,12 @@ print("New MAC address:", f"{mac1}:{mac2}")
 # Print separator
 print(colors.GREEN + "=============================================================================================================[+]" + colors.NC)
 
-# Print new internal IP address
+# Print new internal IP address if changed
 new_internal_ip = get_internal_ip()
 if new_internal_ip and new_internal_ip != internal_ip:
     print("New internal IP address:", new_internal_ip)
 
-# Print new external IP address
+# Print new external IP address if changed
 new_external_ip = get_external_ip()
 if new_external_ip and new_external_ip != external_ip:
     print("New external IP address:", new_external_ip)
