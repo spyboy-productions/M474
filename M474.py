@@ -1,117 +1,87 @@
-import platform
 import subprocess
+import os
 import random
-import psutil
+import re
 import requests
-import datetime
-import socket
 
-def get_current_mac(interface):
-    try:
-        for nic, addrs in psutil.net_if_addrs().items():
-            if nic == interface:
-                for addr in addrs:
-                    if addr.family == psutil.AF_LINK:
-                        return addr.address
-    except (AttributeError, psutil.Error) as e:
-        print(f"Error retrieving MAC address: {e}")
-    return None
+# Define colors for terminal output
+class colors:
+    GREEN = '\033[92m'
+    RED = '\033[91m'
+    NC = '\033[0m'
 
+# Function to get internal IP address
 def get_internal_ip():
-    try:
-        internal_ip = psutil.net_if_addrs().get('lo', [])[0].address
-        return internal_ip
-    except (AttributeError, IndexError, psutil.Error) as e:
-        print(f"Error retrieving internal IP address: {e}")
-    return None
+    return subprocess.check_output(["hostname", "-I"]).decode().strip()
 
+# Function to get external IP address
 def get_external_ip():
     try:
-        response = requests.get('https://api64.ipify.org?format=json')
-        return response.json().get('ip')
-    except (requests.RequestException, ValueError) as e:
-        print(f"Error retrieving external IP address: {e}")
-    return None
+        response = requests.get("https://api.ipify.org")
+        return response.text.strip()
+    except requests.RequestException as e:
+        print(colors.RED + "Error fetching external IP:", e)
+        return None
 
+# Function to renew IP address
 def renew_ip():
     try:
-        subprocess.run(['sudo', 'dhclient', '-r'], check=True)
-        subprocess.run(['sudo', 'dhclient'], check=True)
-        print("IP addresses successfully renewed.")
+        subprocess.run(["dhclient", "-r"])
+        subprocess.run(["dhclient"])
     except subprocess.CalledProcessError as e:
-        print(f"Error renewing IP addresses: {e}")
+        print(colors.RED + "Error renewing IP:", e)
 
-def generate_random_mac():
-    return ':'.join([format(random.randint(0, 255), '02x') for _ in range(6)])
+# Print separator
+print(colors.GREEN + "=============================================================================================================[+]" + colors.NC)
 
-def change_mac(interface, new_mac):
-    try:
-        subprocess.run(['sudo', 'ifconfig', interface, 'down'], check=True)
-        subprocess.run(['sudo', 'ifconfig', interface, 'hw', 'ether', new_mac], check=True)
-        subprocess.run(['sudo', 'ifconfig', interface, 'up'], check=True)
-        print("MAC Address successfully changed.")
-    except subprocess.CalledProcessError as e:
-        print(f"Error changing MAC address: {e}")
+# Check if script is run as root
+if os.geteuid() != 0:
+    print(colors.RED + "This script must be run as root")
+    exit(1)
 
-def check_network_connectivity():
-    try:
-        socket.create_connection(("www.google.com", 80))
-        return True
-    except OSError:
-        return False
+# Get current MAC address
+current_mac_info = subprocess.check_output(["ifconfig", "eth0"]).decode()
+current_mac = re.search(r"ether\s+([0-9a-fA-F:]+)", current_mac_info).group(1)
 
-def print_with_timestamp(message):
-    timestamp = datetime.datetime.now().strftime("[%Y-%m-%d %H:%M:%S]")
-    print(f"{timestamp} {message}")
+# Get internal IP address
+internal_ip = get_internal_ip()
 
-def main():
-    os_name = platform.system()
+# Get external IP address
+external_ip = get_external_ip()
 
-    if os_name == 'Windows':
-        print("This script is primarily designed for Unix-like systems and may not work correctly on Windows.")
-    
-    try:
-        interface = input("Enter the network interface (e.g., 'eth0'): ")
-        print_with_timestamp("=== Network Information ===")
+# Print current MAC address and IP addresses
+print("Current MAC address:", current_mac)
+if internal_ip:
+    print("Internal IP address:", internal_ip)
+if external_ip:
+    print("External IP address:", external_ip)
 
-        current_mac = get_current_mac(interface)
-        internal_ip = get_internal_ip()
-        external_ip = get_external_ip()
+# Renew IP address
+renew_ip()
 
-        if current_mac:
-            print_with_timestamp(f"Current MAC Address: {current_mac}")
+# Print separator
+print(colors.GREEN + "=============================================================================================================[+]" + colors.NC)
 
-        if internal_ip:
-            print_with_timestamp(f"Internal IP Address: {internal_ip}")
+# Change MAC address
+subprocess.run(["macchanger", "-l"], stdout=open("vendor_list.txt", "w"))
+with open("vendor_list.txt", "r") as file:
+    mac_list = file.readlines()
+mac1 = random.choice(mac_list).split()[2]
+mac2 = ':'.join(format(random.randint(0x00, 0xff), '02x') for _ in range(3))
+subprocess.run(["macchanger", "-m", f"{mac1}:{mac2}", "eth0"])
 
-        if external_ip:
-            print_with_timestamp(f"External IP Address: {external_ip}")
+# Print new MAC address
+print("New MAC address:", f"{mac1}:{mac2}")
 
-        network_status = check_network_connectivity()
-        print_with_timestamp(f"Network Connectivity: {'Connected' if network_status else 'Disconnected'}")
+# Print separator
+print(colors.GREEN + "=============================================================================================================[+]" + colors.NC)
 
-        renew_ip_option = input("Do you want to renew IP addresses? (yes/no): ").lower()
+# Print new internal IP address
+new_internal_ip = get_internal_ip()
+if new_internal_ip:
+    print("New internal IP address:", new_internal_ip)
 
-        if renew_ip_option == 'yes' and network_status:
-            renew_ip()
-
-        randomize_internal_ip_option = input("Do you want to randomize the internal IP address? (yes/no): ").lower()
-
-        if randomize_internal_ip_option == 'yes':
-            new_internal_ip = generate_random_mac()
-            print_with_timestamp(f"New Internal IP Address: {new_internal_ip}")
-
-        change_mac_option = input("Do you want to change the MAC address? (yes/no): ").lower()
-
-        if change_mac_option == 'yes':
-            new_mac = generate_random_mac()
-            change_mac(interface, new_mac)
-            print_with_timestamp(f"New MAC Address: {new_mac}")
-
-    except KeyboardInterrupt:
-        print("\nOperation aborted by user.")
-    except Exception as e:
-        print_with_timestamp(f"An unexpected error occurred: {e}")
-
-if __name__ == "__main__":
-    main()
+# Print new external IP address
+new_external_ip = get_external_ip()
+if new_external_ip:
+    print("New external IP address:", new_external_ip)
