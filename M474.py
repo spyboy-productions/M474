@@ -122,7 +122,6 @@ def main():
         # Print all information at the end
         print(f"\n{Color.BLUE}=== Summary ==={Color.ENDC}")
         print_with_timestamp(f"Current MAC Address: {Color.GREEN}{current_mac}{Color.ENDC}")
-        print_with_timestamp(f"Current MAC Address: {Color.GREEN}{current_mac}{Color.ENDC}")
         print_with_timestamp(f"Internal IP Address: {Color.GREEN}{internal_ip}{Color.ENDC}")
         print_with_timestamp(f"External IP Address: {Color.GREEN}{external_ip}{Color.ENDC}")
         print_with_timestamp(f"Network Connectivity: {Color.GREEN}{'Connected' if network_status else 'Disconnected'}{Color.ENDC}")
@@ -134,4 +133,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
