@@ -121,15 +121,4 @@ def main():
 
         # Print all information at the end
         print(f"\n{Color.BLUE}=== Summary ==={Color.ENDC}")
-        print(f"Current MAC Address: {Color.GREEN}{current_mac}{Color.ENDC}")
-        print(f"Internal IP Address: {Color.GREEN}{internal_ip}{Color.ENDC}")
-        print(f"External IP Address: {Color.GREEN}{external_ip}{Color.ENDC}")
-        print(f"Network Connectivity: {Color.GREEN}{'Connected' if network_status else 'Disconnected'}{Color.ENDC}")
-
-    except KeyboardInterrupt:
-        print("\nOperation aborted by user.")
-    except Exception as e:
-        print_with_timestamp(f"{Color.FAIL}An unexpected error occurred: {e}{Color.ENDC}")
-
-if __name__ == "__main__":
-    main()
+        print_with_timestamp(f"Current MAC Address: {Color.GREEN}{current_mac}{Color.ENDC}")
