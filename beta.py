@@ -31,13 +31,6 @@ mac2 = ':'.join(format(random.randint(0x00, 0xff), '02x') for _ in range(3))
 # Change MAC address of interface eth0
 subprocess.run(["macchanger", "-m", f"{mac1}:{mac2}", "eth0"])
 
-# Find the path of the script
-try:
-    path = subprocess.check_output(["find", "/", "-name", "n0Mac.sh"], stderr=subprocess.DEVNULL).decode().strip()
-except subprocess.CalledProcessError:
-    print(colors.RED + "Error: n0Mac.sh script not found.")
-    exit(1)
-
 # Print separator
 print(colors.GREEN + "=============================================================================================================[+]" + colors.NC)
 
@@ -46,4 +39,4 @@ if re.search("n0Mac.sh", open("/etc/crontab").read()):
     exit(1)
 else:
     with open("/etc/crontab", "a") as file:
-        file.write("@reboot root /bin/sh " + path + "\n")
+        file.write("@reboot root /bin/sh /path/to/your/script.py\n")
