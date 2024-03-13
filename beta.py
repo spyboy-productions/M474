@@ -9,6 +9,7 @@ import platform
 class colors:
     GREEN = '\033[92m'
     RED = '\033[91m'
+    YELLOW = '\033[93m'
     NC = '\033[0m'
 
 # Function to get internal IP address
@@ -44,6 +45,18 @@ def renew_ip():
         except subprocess.CalledProcessError as e:
             print(colors.RED + "Error renewing IP:", e)
 
+# Print ASCII art
+print(colors.YELLOW + """
+░▒▓██████████████▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓████████▓▒░▒▓█▓▒░░▒▓█▓▒░ 
+░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ 
+░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░      ░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ 
+░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓████████▓▒░     ░▒▓█▓▒░░▒▓████████▓▒░ 
+░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░      ░▒▓█▓▒░     ░▒▓█▓▒░       ░▒▓█▓▒░ 
+░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░      ░▒▓█▓▒░    ░▒▓█▓▒░        ░▒▓█▓▒░ 
+░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░      ░▒▓█▓▒░    ░▒▓█▓▒░        ░▒▓█▓▒░ 
+                                                                                                                         
+""" + colors.NC)
+
 # Print separator
 print(colors.GREEN + "=============================================================================================================[+]" + colors.NC)
 
@@ -63,11 +76,11 @@ internal_ip = get_internal_ip()
 external_ip = get_external_ip()
 
 # Print current MAC address and IP addresses
-print("Current MAC address:", current_mac)
+print("Current MAC address:", colors.GREEN + current_mac + colors.NC)
 if internal_ip:
-    print("Internal IP address:", internal_ip)
+    print("Internal IP address:", colors.GREEN + internal_ip + colors.NC)
 if external_ip:
-    print("External IP address:", external_ip)
+    print("External IP address:", colors.GREEN + external_ip + colors.NC)
 
 # Renew IP address
 renew_ip()
@@ -84,7 +97,7 @@ mac2 = ':'.join(format(random.randint(0x00, 0xff), '02x') for _ in range(3))
 subprocess.run(["macchanger" if platform.system() != "Windows" else "getmac", "-m", f"{mac1}:{mac2}", "eth0"])
 
 # Print new MAC address
-print("New MAC address:", f"{mac1}:{mac2}")
+print("New MAC address:", colors.GREEN + f"{mac1}:{mac2}" + colors.NC)
 
 # Print separator
 print(colors.GREEN + "=============================================================================================================[+]" + colors.NC)
@@ -92,9 +105,9 @@ print(colors.GREEN + "==========================================================
 # Print new internal IP address
 new_internal_ip = get_internal_ip()
 if new_internal_ip:
-    print("New internal IP address:", new_internal_ip)
+    print("New internal IP address:", colors.GREEN + new_internal_ip + colors.NC)
 
 # Print new external IP address
 new_external_ip = get_external_ip()
 if new_external_ip:
-    print("New external IP address:", new_external_ip)
+    print("New external IP address:", colors.GREEN + new_external_ip + colors.NC)
