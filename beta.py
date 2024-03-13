@@ -47,18 +47,23 @@ def renew_ip():
 
 # Print ASCII art
 print(colors.YELLOW + """
-░▒▓██████████████▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓████████▓▒░▒▓█▓▒░░▒▓█▓▒░ 
-░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ 
-░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░      ░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ 
-░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓████████▓▒░     ░▒▓█▓▒░░▒▓████████▓▒░ 
-░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░      ░▒▓█▓▒░     ░▒▓█▓▒░       ░▒▓█▓▒░ 
-░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░      ░▒▓█▓▒░    ░▒▓█▓▒░        ░▒▓█▓▒░ 
-░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░      ░▒▓█▓▒░    ░▒▓█▓▒░        ░▒▓█▓▒░ 
-                                                                                                                         
+    ...     ..      ..                                                   
+  x*8888x.:*8888: -"888:           xeee    dL ud8Nu  :8c         xeee    
+ X   48888X `8888H  8888          d888R    8Fd888888L %8        d888R    
+X8x.  8888X  8888X  !888>        d8888R    4N88888888cuR       d8888R    
+X8888 X8888  88888   "*8%-      @ 8888R    4F   ^""%""d       @ 8888R    
+'*888!X8888> X8888  xH8>      .P  8888R    d       .z8      .P  8888R    
+  `?8 `8888  X888X X888>     :F   8888R    ^     z888      :F   8888R    
+  -^  '888"  X888  8888>    x"    8888R        d8888'     x"    8888R    
+   dx '88~x. !88~  8888>   d8eeeee88888eer    888888     d8eeeee88888eer 
+ .8888Xf.888x:!    X888X.:        8888R      :888888            8888R    
+:""888":~"888"     `888*"         8888R       888888            8888R    
+    "~'    "~        ""        "*%%%%%%**~    '%**%          "*%%%%%%**~ 
+                                                                                                                                                                                                                                                                                                                                                 
 """ + colors.NC)
 
 # Print separator
-print(colors.GREEN + "=============================================================================================================[+]" + colors.NC)
+print(colors.GREEN + "===================================================================" + colors.NC)
 
 # Check if script is run as root (on Unix-like systems)
 if platform.system() != "Windows" and os.geteuid() != 0:
@@ -86,7 +91,7 @@ if external_ip:
 renew_ip()
 
 # Print separator
-print(colors.GREEN + "=============================================================================================================[+]" + colors.NC)
+print(colors.GREEN + "===================================================================" + colors.NC)
 
 # Change MAC address (this part remains the same for both systems)
 subprocess.run(["macchanger" if platform.system() != "Windows" else "getmac", "-l"], stdout=open("vendor_list.txt", "w"))
@@ -100,7 +105,7 @@ subprocess.run(["macchanger" if platform.system() != "Windows" else "getmac", "-
 print("New MAC address:", colors.GREEN + f"{mac1}:{mac2}" + colors.NC)
 
 # Print separator
-print(colors.GREEN + "=============================================================================================================[+]" + colors.NC)
+print(colors.GREEN + "===================================================================" + colors.NC)
 
 # Print new internal IP address
 new_internal_ip = get_internal_ip()
