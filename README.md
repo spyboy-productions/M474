@@ -25,8 +25,11 @@ cd M474
 ```bash
 pip3 install -r requirements.txt
 ```
+```diff
++  Note: Run as a root.
+```
 ```bash
-python3 M474.py
+sudo python3 M474.py
 ```
 
 #### Contribution:
