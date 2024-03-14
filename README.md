@@ -69,6 +69,6 @@ Contributions and feature requests are welcome! If you encounter any issues or h
 ### ⭔ Snapshots
 ---
 
-<img width="100%" align="centre" src="" />
+<img width="100%" align="centre" src="https://github.com/spyboy-productions/M474/blob/main/Screenshot%20-m474.png" />
 
 <h4 align="center"> If you find this GitHub repo useful, please consider giving it a star! ⭐️ </h4> 
