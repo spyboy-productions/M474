@@ -4,6 +4,7 @@ import random
 import re
 import requests
 import platform
+import sys
 
 # Define colors for terminal output
 class colors:
@@ -45,6 +46,20 @@ def renew_ip():
         except subprocess.CalledProcessError as e:
             print(colors.RED + "Error renewing IP:", e)
 
+# Function to change MAC address
+def change_mac():
+    subprocess.run(["macchanger" if platform.system() != "Windows" else "getmac", "-l"], stdout=open("vendor_list.txt", "w"))
+    with open("vendor_list.txt", "r") as file:
+        mac_list = file.readlines()
+    mac1 = random.choice(mac_list).split()[2]
+    mac2 = ':'.join(format(random.randint(0x00, 0xff), '02x') for _ in range(3))
+    subprocess.run(["macchanger" if platform.system() != "Windows" else "getmac", "-m", f"{mac1}:{mac2}", "eth0"])
+    return f"{mac1}:{mac2}"
+
+# Function to revert MAC address to the permanent MAC address
+def revert_mac():
+    subprocess.run(["macchanger" if platform.system() != "Windows" else "getmac", "-p", "eth0"])
+
 # Print ASCII art
 print(colors.YELLOW + """
     ...     ..      ..                                                   
@@ -59,7 +74,6 @@ X8888 X8888  88888   "*8%-      @ 8888R    4F   ^""%""d       @ 8888R
  .8888Xf.888x:!    X888X.:        8888R      :888888            8888R    
 :""888":~"888"     `888*"         8888R       888888            8888R    
     "~'    "~        ""        "*%%%%%%**~    '%**%          "*%%%%%%**~ 
-                                                                                                                                                                                                                                                                                                                                                 
 """ + colors.NC)
 
 # Print separator
@@ -93,16 +107,18 @@ renew_ip()
 # Print separator
 print(colors.GREEN + "===================================================================" + colors.NC)
 
-# Change MAC address (this part remains the same for both systems)
-subprocess.run(["macchanger" if platform.system() != "Windows" else "getmac", "-l"], stdout=open("vendor_list.txt", "w"))
-with open("vendor_list.txt", "r") as file:
-    mac_list = file.readlines()
-mac1 = random.choice(mac_list).split()[2]
-mac2 = ':'.join(format(random.randint(0x00, 0xff), '02x') for _ in range(3))
-subprocess.run(["macchanger" if platform.system() != "Windows" else "getmac", "-m", f"{mac1}:{mac2}", "eth0"])
+# Check if command-line argument is provided to revert MAC address
+if len(sys.argv) > 1 and sys.argv[1] == "revert":
+    print(colors.GREEN + "Reverting MAC address to permanent MAC address..." + colors.NC)
+    revert_mac()
+    print(colors.GREEN + "MAC address reverted successfully!" + colors.NC)
+    exit(0)
+
+# Change MAC address
+new_mac = change_mac()
 
 # Print new MAC address
-print("New MAC address:", colors.GREEN + f"{mac1}:{mac2}" + colors.NC)
+print("New MAC address:", colors.GREEN + new_mac + colors.NC)
 
 # Print separator
 print(colors.GREEN + "===================================================================" + colors.NC)
@@ -116,3 +132,5 @@ if new_internal_ip:
 new_external_ip = get_external_ip()
 if new_external_ip:
     print("New external IP address:", colors.GREEN + new_external_ip + colors.NC)
+
+print(colors.YELLOW + "To revert MAC address to the permanent MAC address, run the script with the argument 'revert'." + colors.NC)
