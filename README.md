@@ -55,6 +55,9 @@ pip3 install -r requirements.txt
 sudo python3 M474.py
 ```
 
+#### 💬 If having an issue [Chat here](https://discord.gg/ZChEmMwE8d)
+[![Discord Server](https://discord.com/api/guilds/726495265330298973/embed.png)](https://discord.gg/ZChEmMwE8d)
+
 #### Contribution:
 
 Contributions and feature requests are welcome! If you encounter any issues or have ideas for improvement, feel free to open an issue or submit a pull request.
@@ -62,3 +65,10 @@ Contributions and feature requests are welcome! If you encounter any issues or h
 #### 😴🥱😪💤 ToDo:
 
 - After completing a pen-test or if something goes wrong, use the command to reset your Mac address to the default one.
+
+### ⭔ Snapshots
+---
+
+<img width="100%" align="centre" src="" />
+
+<h4 align="center"> If you find this GitHub repo useful, please consider giving it a star! ⭐️ </h4> 
