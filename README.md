@@ -64,7 +64,7 @@ Contributions and feature requests are welcome! If you encounter any issues or h
 
 #### 😴🥱😪💤 ToDo:
 
-- After completing a pen-test or if something goes wrong, use the command to reset your Mac address to the default one.
+- add more stuff to secure network privacy
 
 ### ⭔ Snapshots
 ---
