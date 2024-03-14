@@ -54,6 +54,13 @@ pip3 install -r requirements.txt
 ```bash
 sudo python3 M474.py
 ```
+```diff
++ To manually revert the MAC address to the permanent MAC address.
+```
+```bash
+sudo python3 M474.py revert
+```
+This will `revert the MAC address` and print a success message.
 
 #### 💬 If having an issue [Chat here](https://discord.gg/ZChEmMwE8d)
 [![Discord Server](https://discord.com/api/guilds/726495265330298973/embed.png)](https://discord.gg/ZChEmMwE8d)
