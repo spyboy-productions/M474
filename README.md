@@ -1,9 +1,3 @@
-## ⚠️ Disclaimer: Use at Your Own Risk ⚠️
-
-M474 is currently in the `development beta phase`. It might throw errors or cause unexpected behaviour. Use this tool at your own risk, and be cautious when making changes that could potentially disrupt network connectivity or system functionality.
-
-## Overview
-
 M474 is an open-source network privacy and security tool designed to enhance your online privacy. It provides features for changing MAC addresses, randomizing internal IP addresses, and renewing IP addresses, creating an additional layer of privacy during network activities.
 
 ### Features
@@ -14,13 +8,13 @@ M474 is an open-source network privacy and security tool designed to enhance you
 
 - **IP Renewal:** Renew both internal and external IP addresses to enhance anonymity and avoid tracking.
 
-- **Network Connectivity Checker:** Verify network connectivity before making changes to avoid disruptions.
+<h4 align="center"> This tool is a Proof of Concept and is for Educational Purposes Only. </h4> 
 
-- **Timestamped Logs:** All actions and changes are logged with timestamps for better tracking and auditability.
+```diff
+-  It's important to exercise caution when making changes that could potentially disrupt system functionality or network connectivity.
+```
 
-## Installation
-
-### Clone the Repository
+### Installation
 
 ```bash
 git clone https://github.com/spyboy-productions/M474.git
