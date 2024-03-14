@@ -29,5 +29,10 @@ pip3 install -r requirements.txt
 python3 M474.py
 ```
 
-Contribution
-Contributions are welcome! If you have ideas for new features, or improvements, or find any issues, feel free to open an issue or submit a pull request.
+#### Contribution:
+
+Contributions and feature requests are welcome! If you encounter any issues or have ideas for improvement, feel free to open an issue or submit a pull request.
+
+#### 😴🥱😪💤 ToDo:
+
+- After completing a pen-test or if something goes wrong, use the command to reset your Mac address to the default one.
