@@ -14,68 +14,148 @@
     <a href="https://spyboy.in/Discord">
       <img src="https://img.shields.io/badge/-Discord-black?logo=discord&style=for-the-badge">
     </a>
-  
 </p>
 
 <img width="100%" align="centre" src="https://github.com/spyboy-productions/M474/blob/main/M474.png" />
 
-<be>
+<br>
 
-M474 is an open-source network privacy and security tool designed to enhance your online privacy. It provides features for changing MAC addresses, randomizing internal IP addresses, and renewing IP addresses, creating an additional layer of privacy during network activities.
+# 🛰️ M474 — Network Privacy Enhancer
 
-### Features
+**M474** is an open-source **network privacy & MAC randomization tool** designed to improve your online anonymity.  
+This updated version is **optimized, safer, cleaner, and fully modernized**.
 
-- **MAC Address Changer:** Change the MAC address of your network interface to enhance privacy and security.
+It provides:
 
-- **Internal IP Randomizer:** Randomize the internal (loopback) IP address for added privacy and network obfuscation.
+- MAC spoofing (Linux)
+- IP renewal (Linux + Windows)
+- Network interface auto-detection
+- Safe revert with backup
+- No broken vendor parsing, no temp files
+- Fully cross-platform safe execution
 
-- **IP Renewal:** Renew both internal and external IP addresses to enhance anonymity and avoid tracking.
-
-<h4 align="center"> This tool is a Proof of Concept and is for Educational Purposes Only. </h4> 
+<h4 align="center">This tool is a Proof of Concept and for Educational Purposes Only.</h4>
 
 > [!IMPORTANT]
-> It is crucial to be cautious when making changes that could potentially disrupt system functionality or network connectivity.
+> Misuse of MAC spoofing can disrupt your network connectivity.  
+> Run responsibly and only on systems you control.
 
+---
 
-### Installation
+## ✨ Features
+
+### 🟢 **Linux (Full Support)**
+- **MAC Address Spoofing**  
+  Random, locally-administered valid MACs  
+- **MAC Revert Function**  
+  Automatically restores your original MAC from a secure backup  
+- **Automatic Interface Detection**  
+  Works on wlan0, eth0, enpXsY, wlpXsY, etc.  
+- **IP Renewal** (internal + external)  
+- **Safe Execution Without Root**  
+  Shows info but won’t break anything
+
+### 🔵 **Windows (Safe, Partial Support)**
+- MAC spoofing blocked (to avoid registry corruption)  
+- **Internal & external IP detection**  
+- **IP renew support (`ipconfig /renew`)**  
+- Cleaner output and automatic error handling
+
+---
+
+## 🛠️ Installation
 
 ```bash
 git clone https://github.com/spyboy-productions/M474.git
-```
+````
+
 ```bash
 cd M474
 ```
+
+### 🔧 Install Python requirements
+
+(Not many—only standard modules unless you added more)
+
 ```bash
 pip3 install -r requirements.txt
 ```
-```diff
-+  Note: This script must be run as root.
-```
+
+---
+
+## ▶️ Usage
+
+### 🟢 Run normally (Linux + Windows)
+
 ```bash
 sudo python3 M474.py
 ```
-```diff
-+ To manually revert the MAC address to the permanent MAC address.
-```
-```bash
-sudo python3 M474.py revert
-```
-This will `revert the MAC address` and print a success message.
 
-#### 💬 If having an issue [Chat here](https://discord.gg/ZChEmMwE8d)
+### 🔄 Revert MAC back to original (Linux only)
+
+```bash
+sudo python3 M474.py --revert
+```
+
+### 📡 Specify your own interface
+
+```bash
+sudo python3 M474.py --iface wlan0
+```
+
+### 🚫 Skip IP renewal
+
+```bash
+sudo python3 M474.py --no-ip-renew
+```
+
+---
+
+## 🧠 Notes
+
+* Script automatically detects your primary network interface
+* Backs up your original MAC at:
+  `~/.mac_spoofer_backup.json`
+* Linux-only MAC changes are intentional for safety
+* Windows MAC spoofing via registry can be added—upon request
+
+---
+
+## 💬 Need help?
+
+If you're facing issues:
+
+### 👉 [Chat here on Discord](https://discord.gg/ZChEmMwE8d)
+
 [![Discord Server](https://discord.com/api/guilds/726495265330298973/embed.png)](https://discord.gg/ZChEmMwE8d)
 
-#### Contribution:
-
-Contributions and feature requests are welcome! If you encounter any issues or have ideas for improvement, feel free to open an issue or submit a pull request.
-
-#### 😴🥱😪💤 ToDo:
-
-- add more stuff to secure network privacy
-
-### ⭔ Snapshots
 ---
+
+## 🤝 Contributions
+
+Contributions and suggestions are welcome!
+Feel free to open:
+
+* an **Issue**
+* a **Pull Request**
+* a **Feature Request**
+
+---
+
+## 🗂️ Future Plans (ToDo)
+
+* Add vendor-based MAC address randomization
+* Add periodic auto-randomization (every X minutes)
+* Add advanced privacy modes
+* Add optional Windows spoofing support
+* Add GUI version
+
+---
+
+## ⭔ Snapshots
 
 <img width="100%" align="centre" src="https://github.com/spyboy-productions/M474/blob/main/Snap-m474.png" />
 
-<h4 align="center"> If you find this GitHub repo useful, please consider giving it a star! ⭐️ </h4> 
+---
+
+<h4 align="center">⭐ If you find this project useful, please consider giving it a star! ⭐</h4>
