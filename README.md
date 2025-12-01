@@ -23,7 +23,6 @@
 # 🛰️ M474 — Network Privacy Enhancer
 
 **M474** is an open-source **network privacy & MAC randomization tool** designed to improve your online anonymity.  
-This updated version is **optimized, safer, cleaner, and fully modernized**.
 
 It provides:
 
@@ -142,7 +141,7 @@ Feel free to open:
 
 ---
 
-## 🗂️ Future Plans (ToDo)
+## Future Plans (ToDo)
 
 * Add vendor-based MAC address randomization
 * Add periodic auto-randomization (every X minutes)
