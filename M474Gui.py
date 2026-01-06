@@ -323,7 +323,7 @@ class M474GUI:
         
         subtitle_label = ttk.Label(
             header_frame,
-            text=f"Version {APP_VERSION}",
+            text=f"Version {APP_VERSION} - Network Identity Management Tool",
             font=("Helvetica", 10),
             bootstyle="secondary"
         )
@@ -1057,6 +1057,7 @@ def main():
     root.protocol("WM_DELETE_WINDOW", on_closing)
     
     root.mainloop()
+
 
 if __name__ == "__main__":
     main()

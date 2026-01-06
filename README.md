@@ -143,11 +143,11 @@ Feel free to open:
 
 ## Future Plans (ToDo)
 
-* Add vendor-based MAC address randomization
-* Add periodic auto-randomization (every X minutes)
-* Add advanced privacy modes
-* Add optional Windows spoofing support
-* Add GUI version
+- [ ] Add vendor-based MAC address randomization
+- [ ] Add periodic auto-randomization (every X minutes)
+- [ ] Add advanced privacy modes
+- [ ] Add optional Windows spoofing support
+- [X] Add GUI version
 
 ---
 
